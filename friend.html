@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Question One</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="page page-question">
+    <main class="card">
+      <p class="eyebrow">Step 1</p>
+      <h1>Are you a friend of Siva?</h1>
+      <p class="subtext">
+        Answer carefully. The next clue is waiting right behind this one.
+      </p>
+
+      <div class="actions">
+        <button
+          class="btn primary"
+          type="button"
+          data-next="specialty.html"
+          data-message="Nice. You passed the first clue."
+        >
+          Yes
+        </button>
+        <button
+          class="btn secondary"
+          type="button"
+          data-next="specialty.html"
+          data-message="No worries. The surprise still includes you."
+        >
+          No
+        </button>
+      </div>
+
+      <p class="status" data-note aria-live="polite"></p>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

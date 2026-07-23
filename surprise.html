@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday Jennifer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Story+Script&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="page page-surprise">
+    <main class="card celebration-card">
+      <p class="eyebrow">The surprise</p>
+      <h1>Happy Birthday, Jennifer!</h1>
+
+      <section class="photo-carousel" aria-label="Jennifer photo carousel">
+        <div class="carousel-shell">
+          <button
+            class="carousel-control carousel-control-prev"
+            type="button"
+            data-carousel-prev
+            aria-label="Previous photo"
+          >
+            &#8249;
+          </button>
+
+          <div class="carousel-viewport">
+            <div class="carousel-track" data-carousel-track></div>
+          </div>
+
+          <button
+            class="carousel-control carousel-control-next"
+            type="button"
+            data-carousel-next
+            aria-label="Next photo"
+          >
+            &#8250;
+          </button>
+        </div>
+
+        <div class="carousel-dots" data-carousel-dots></div>
+      </section>
+
+      <section class="music-panel" aria-label="Birthday music">
+        <button
+          class="btn secondary music-toggle"
+          type="button"
+          data-music-toggle
+          aria-pressed="false"
+        >
+          Play music
+        </button>
+        <p class="music-status" data-music-status>Music starts automatically.</p>
+      </section>
+
+      <p class="subtext reveal-text" data-typewriter>
+        Wishing you a day full of smiles, cake, laughter, and beautiful moments.
+      </p>
+
+      <div class="cake" aria-hidden="true">🎂 ✨ 🎉</div>
+
+      <div class="actions">
+        <button class="btn primary" type="button" data-open-letter>Show message</button>
+      </div>
+    </main>
+
+    <div class="letter-overlay" data-letter-overlay hidden>
+      <div class="letter-popup" role="dialog" aria-modal="true" aria-labelledby="letter-title">
+        <button
+          class="letter-close"
+          type="button"
+          data-close-letter
+          aria-label="Close letter"
+        >
+          ×
+        </button>
+
+        <p class="letter-kicker">A little letter</p>
+        <h2 id="letter-title" class="letter-title story-script-regular">Happy Birthday, Jenny! 🎉</h2>
+
+        <div class="letter-message story-script-regular">
+          <p><strong>Happy Birthday, Jenny!</strong> 🎉</p>
+          <p>
+            I wanted to write you this short note to wish you a wonderful day. Who knew that
+            meeting randomly on Discord over a game of PUBG would lead to such a cool
+            friendship? I’m really grateful for all the fun chats, laughter, and gaming sessions
+            we’ve shared.
+          </p>
+          <p>
+            Thank you for being such a great friend. May this new year bring you everything you
+            wish for! Enjoy your day! 🎁🎉
+          </p>
+        </div>
+
+        <div class="letter-footer">
+          <span class="letter-hint">Close when you’re done reading.</span>
+        </div>
+      </div>
+    </div>
+
+    <audio
+      data-birthday-music
+      src="music/birthday.wav"
+      preload="auto"
+      loop
+      autoplay
+    ></audio>
+
+    <script src="script.js"></script>
+  </body>
+</html>

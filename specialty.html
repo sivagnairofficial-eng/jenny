@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Question Two</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="page page-question">
+    <main class="card">
+      <p class="eyebrow">Step 2</p>
+      <h1>Do you want to know the specialty of today?</h1>
+      <p class="subtext">
+        One more click and the surprise begins.
+      </p>
+
+      <div class="actions">
+        <button
+          class="btn primary"
+          type="button"
+          data-next="surprise.html"
+          data-message="Here comes the reveal."
+        >
+          Yes, show me
+        </button>
+        <button
+          class="btn secondary"
+          type="button"
+          data-next="surprise.html"
+          data-message="Too late. The surprise is ready."
+        >
+          No, but tell me anyway
+        </button>
+      </div>
+
+      <p class="status" data-note aria-live="polite"></p>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
