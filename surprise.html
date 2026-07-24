@@ -68,6 +68,15 @@
       </div>
     </main>
 
+    <button
+      class="scroll-down-fab"
+      type="button"
+      data-scroll-to-letter
+      aria-label="Jump to the letter button"
+    >
+      <span class="scroll-down-fab__icon" aria-hidden="true">↓</span>
+    </button>
+
     <div class="letter-overlay" data-letter-overlay hidden>
       <div class="letter-popup" role="dialog" aria-modal="true" aria-labelledby="letter-title">
         <button
@@ -87,7 +96,7 @@
           <p>
             I wanted to write you this short note to wish you a wonderful day. Who knew that
             meeting randomly on Discord over a game of PUBG would lead to such a cool
-            friendship? I’m really grateful for all the fun chats, laughter, and gaming sessions
+            friendship? I’m really grateful for all the fun chats, laughter and snap memories
             we’ve shared.
           </p>
           <p>
@@ -104,10 +113,16 @@
 
     <audio
       data-birthday-music
-      src="music/birthday.wav"
+      src="music/bdy.mp3"
       preload="auto"
       loop
       autoplay
+    ></audio>
+
+    <audio
+      data-letter-music
+      src="music/letter.mp3"
+      preload="auto"
     ></audio>
 
     <script src="script.js"></script>
