@@ -31,6 +31,43 @@ function launchConfetti() {
   }
 }
 
+function launchAmbientComets() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  const colors = [
+    "rgba(255, 122, 217, 0.95)",
+    "rgba(143, 243, 255, 0.95)",
+    "rgba(255, 209, 102, 0.92)",
+    "rgba(138, 130, 255, 0.92)",
+  ];
+
+  const spawnComets = () => {
+    for (let i = 0; i < 2; i += 1) {
+      const comet = document.createElement("span");
+      comet.className = "ambient-comet";
+
+      const size = 6 + Math.random() * 8;
+      comet.style.left = `${Math.random() * 100}vw`;
+      comet.style.top = `${-12 - Math.random() * 18}vh`;
+      comet.style.width = `${size}px`;
+      comet.style.height = `${size}px`;
+      comet.style.color = colors[Math.floor(Math.random() * colors.length)];
+      comet.style.setProperty("--dx", `${-10 + Math.random() * 20}vw`);
+      comet.style.setProperty("--dy", `${114 + Math.random() * 18}vh`);
+      comet.style.animationDuration = `${8 + Math.random() * 4}s`;
+      comet.style.animationDelay = `${Math.random() * 0.8}s`;
+
+      document.body.appendChild(comet);
+      window.setTimeout(() => comet.remove(), 13500);
+    }
+  };
+
+  spawnComets();
+  window.setInterval(spawnComets, 1800);
+}
+
 function shuffleArray(values) {
   const items = [...values];
 
@@ -184,10 +221,11 @@ function setupBirthdayMusic() {
   const status = document.querySelector("[data-music-status]");
 
   if (!audio || !toggle) {
-    return;
+    return null;
   }
 
   audio.volume = 0.78;
+  let resumeAfterLetter = false;
 
   const syncUi = (isPlaying, message) => {
     toggle.classList.toggle("is-playing", isPlaying);
@@ -207,6 +245,22 @@ function setupBirthdayMusic() {
       syncUi(false, "Autoplay blocked. Tap play to start the music.");
       return false;
     }
+  };
+
+  const pauseForLetter = () => {
+    resumeAfterLetter = !audio.paused;
+    if (resumeAfterLetter) {
+      audio.pause();
+    }
+  };
+
+  const resumeAfterLetterPopup = () => {
+    if (!resumeAfterLetter) {
+      return;
+    }
+
+    resumeAfterLetter = false;
+    void startMusic("Music is playing.");
   };
 
   toggle.addEventListener("click", async () => {
@@ -234,12 +288,18 @@ function setupBirthdayMusic() {
   window.setTimeout(() => {
     startMusic("Music is playing.");
   }, 0);
+
+  return {
+    pauseForLetter,
+    resumeAfterLetter: resumeAfterLetterPopup,
+  };
 }
 
-function setupLetterPopup() {
+function setupLetterPopup(musicController) {
   const overlay = document.querySelector("[data-letter-overlay]");
   const openButton = document.querySelector("[data-open-letter]");
   const closeButton = document.querySelector("[data-close-letter]");
+  const letterAudio = document.querySelector("[data-letter-music]");
 
   if (!overlay || !openButton || !closeButton) {
     return;
@@ -247,18 +307,48 @@ function setupLetterPopup() {
 
   let lastFocusedElement = null;
 
+  const resetLetterAudio = () => {
+    if (!letterAudio) {
+      return;
+    }
+
+    letterAudio.pause();
+    try {
+      letterAudio.currentTime = 0;
+    } catch (error) {
+      // Ignore seek errors when the audio has not loaded yet.
+    }
+  };
+
+  const playLetterAudio = () => {
+    if (!letterAudio) {
+      return;
+    }
+
+    resetLetterAudio();
+    void letterAudio.play().catch(() => {});
+  };
+
   const openLetter = () => {
     lastFocusedElement = document.activeElement;
+    if (musicController) {
+      musicController.pauseForLetter();
+    }
     overlay.hidden = false;
     document.body.classList.add("modal-open");
+    playLetterAudio();
     window.setTimeout(() => {
       closeButton.focus();
     }, 0);
   };
 
   const closeLetter = () => {
+    resetLetterAudio();
     overlay.hidden = true;
     document.body.classList.remove("modal-open");
+    if (musicController) {
+      musicController.resumeAfterLetter();
+    }
     if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
       lastFocusedElement.focus();
     } else {
@@ -280,6 +370,34 @@ function setupLetterPopup() {
       closeLetter();
     }
   });
+}
+
+function setupScrollHelper() {
+  const helper = document.querySelector("[data-scroll-to-letter]");
+  const openButton = document.querySelector("[data-open-letter]");
+
+  if (!helper || !openButton) {
+    return;
+  }
+
+  const updateVisibility = () => {
+    const buttonRect = openButton.getBoundingClientRect();
+    const fullyVisible = buttonRect.top >= 12 && buttonRect.bottom <= window.innerHeight - 12;
+    helper.hidden = fullyVisible;
+  };
+
+  const scrollToLetter = () => {
+    openButton.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "end",
+      inline: "nearest",
+    });
+  };
+
+  helper.addEventListener("click", scrollToLetter);
+  window.addEventListener("scroll", updateVisibility, { passive: true });
+  window.addEventListener("resize", updateVisibility);
+  updateVisibility();
 }
 
 function typeText(element) {
@@ -329,10 +447,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (document.body.classList.contains("page-surprise")) {
     buildCarousel();
-    setupBirthdayMusic();
-    setupLetterPopup();
+    const birthdayMusic = setupBirthdayMusic();
+    setupLetterPopup(birthdayMusic);
+    setupScrollHelper();
     clearExistingConfetti();
     launchConfetti();
+    launchAmbientComets();
 
     const text = document.querySelector("[data-typewriter]");
     if (text) {
