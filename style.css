@@ -55,6 +55,7 @@ body::before {
 .card {
   width: min(680px, 100%);
   position: relative;
+  z-index: 2;
   overflow: hidden;
   padding: clamp(28px, 4vw, 44px);
   text-align: center;
@@ -106,6 +107,41 @@ h1 {
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 28px;
+}
+
+.scroll-down-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 8;
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(14, 11, 28, 0.8);
+  color: var(--text);
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.34);
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.scroll-down-fab:hover,
+.scroll-down-fab:focus-visible {
+  transform: translateY(-3px) scale(1.05);
+  background: rgba(255, 122, 217, 0.28);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.scroll-down-fab[hidden] {
+  display: none !important;
+}
+
+.scroll-down-fab__icon {
+  font-size: 1.55rem;
+  line-height: 1;
 }
 
 .btn {
@@ -460,6 +496,37 @@ h1 {
   filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.16));
 }
 
+.ambient-comet {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.96);
+  background: radial-gradient(circle at 35% 35%, currentColor 0 36%, rgba(255, 255, 255, 0.25) 56%, transparent 72%);
+  box-shadow: 0 0 18px currentColor;
+  mix-blend-mode: screen;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation-name: cometDrift;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.ambient-comet::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 80%;
+  width: clamp(42px, 8vw, 112px);
+  height: 2px;
+  border-radius: 999px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, transparent 0%, currentColor 52%, rgba(255, 255, 255, 0.1) 100%);
+  opacity: 0.55;
+}
+
 .confetti {
   position: fixed;
   top: -16px;
@@ -471,7 +538,7 @@ h1 {
   animation-name: fall;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
-  z-index: 1;
+  z-index: 3;
 }
 
 @keyframes bob {
@@ -495,6 +562,22 @@ h1 {
   }
 }
 
+@keyframes cometDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.72) rotate(16deg);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate3d(var(--dx), var(--dy), 0) scale(1.02) rotate(16deg);
+    opacity: 0;
+  }
+}
+
 @media (max-width: 640px) {
   .card {
     border-radius: 22px;
@@ -506,6 +589,13 @@ h1 {
 
   .btn {
     width: 100%;
+  }
+
+  .scroll-down-fab {
+    right: 14px;
+    bottom: 14px;
+    width: 50px;
+    height: 50px;
   }
 
   .gift-button {
